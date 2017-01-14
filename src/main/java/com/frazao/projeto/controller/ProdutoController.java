@@ -32,7 +32,6 @@ public class ProdutoController {
 	public ModelAndView home() {
 		ModelAndView mv = new ModelAndView("CadastroProduto");
 		mv.addObject(new Produto());
-		mv.addObject(new Categoria());
 		return mv;
 	}
 
