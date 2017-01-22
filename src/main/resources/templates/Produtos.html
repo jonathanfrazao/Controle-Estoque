@@ -9,7 +9,44 @@
 
 
 <section layout:fragment="conteudo">
-	<h1>Lista de Produtos</h1>
+<div th:insert="~{MensagemSucesso :: mensagemSucesso}"></div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Lista de Produtos</h3>
+		</div>
+		<div class="panel-body">
+			<table class="table table-striped table-bordered">
+				<thead>
+					<tr>
+						<th class="text-center">#</th>
+						<th>Nome</th>
+						<th class="text-center">Quantidade</th>
+						<th class="text-right">Valor</th>
+						<th></th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr th:each="produto :${produtos}">
+						<td class="text-center" th:text="${produto.codigo}"></td>
+						<td th:text="${produto.nome}"></td>
+						<td class="text-center" th:text="${produto.quantEstoque}">Quantidade</td>
+						<td class="text-right" th:text="${produto.valor}"></td>
+						<td class="text-center">
+							<a class="btn btn-link btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModal" th:attr="data-codigo=${produto.codigo}, 	data-nome=${produto.nome}">
+								<span class="glyphicon glyphicon-remove"></span>
+							</a>
+
+							<a class="btn btn-link btn-xs">
+								<span class="glyphicon glyphicon-edit"></span>
+							</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div th:insert="~{ExclusaoModal :: exclusaoModal}"></div>
+	</div>
 </section>
 
 </html>

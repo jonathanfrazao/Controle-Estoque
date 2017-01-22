@@ -33,32 +33,29 @@
 							<option th:each="categoria :${categorias}" th:value="${categoria.codigo}" th:text="${categoria.descricao}"></option>
 						</select>
 					</div>
-					<button type="button" class="btn btn-default" data-toggle="modal" data-target="#DialogoCadastroCategoria">+</button>
+					<a th:href="@{/produtos/categoria}"><button type="button" class="btn btn-default">+</button></a>
 				</div>
 				<div class="form-group">
 					<label for="quantidade" class="col-sm-2 control-label">Quantidade</label>
-					<div class="col-sm-4">
+					<div class="col-sm-2">
 						<input type="text" class="form-control" id="quantidade" placeholder="Quantidade em estoque" name="quantEstoque" 
 						th:field="*{quantEstoque}">
 					</div>
 				</div>
 				<div class="form-group" th:classappend="${#fields.hasErrors('valor')} ? 'has-error'">
 					<label for="valor" class="col-sm-2 control-label">Valor</label>
-					<div class="col-sm-4">
+					<div class="col-sm-2">
 						<input type="text" class="form-control" id="valor" placeholder="Valor unidade do produto" name="valor" th:field="*{valor}">
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<button type="submit" class="btn btn-default">Salvar</button>
+						<button type="submit" class="btn btn-primary">Salvar</button>
 					</div>
 				</div>
 			</div>
 		</div>	
 	</form>
-
-	<div th:insert="~{CadastroCategoriaModal :: ModalCadastroCategoria}"></div>
-
 </section>
 
 </html>
