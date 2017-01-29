@@ -34,10 +34,14 @@ public class ProdutoController {
 	@Autowired
 	private Produtos produtos;
 
+	private static final String CADASTRO_PRODUTO_VIEW = "Conteudo/CadastroProduto";
+	private static final String CATEGORIAS_VIEW = "Conteudo/Categorias";
+	private static final String PRODUTOS_VIEW = "Conteudo/Produtos";
+
 	// tela :: Home.
 	@GetMapping("/novo")
 	public ModelAndView home() {
-		ModelAndView mv = new ModelAndView("CadastroProduto");
+		ModelAndView mv = new ModelAndView(CADASTRO_PRODUTO_VIEW);
 		mv.addObject(new Produto());
 		return mv;
 	}
@@ -45,7 +49,7 @@ public class ProdutoController {
 	// tela :: Categoria.
 	@GetMapping("/categoria")
 	public ModelAndView categoria() {
-		ModelAndView mv = new ModelAndView("Categorias");
+		ModelAndView mv = new ModelAndView(CATEGORIAS_VIEW);
 		mv.addObject(new Categoria());
 		return mv;
 	}
@@ -54,37 +58,76 @@ public class ProdutoController {
 	@PostMapping
 	public String cadastrar(@Validated Produto produto, Errors errors, RedirectAttributes attributes) {
 		if (errors.hasErrors()) {
-			return "CadastroProduto";
+			return CADASTRO_PRODUTO_VIEW;
+		}
+
+		if (produto.getCodigo() == null) {
+			attributes.addFlashAttribute("mensagem", "Produto cadastrado com sucesso.");
+		} else {
+			attributes.addFlashAttribute("mensagem", "Produto editado com sucesso.");
 		}
 		produtoService.salvar(produto);
-		attributes.addFlashAttribute("mensagem", "Produto cadastrado com sucesso.");
 		return "redirect:/produtos/novo";
 	}
 
 	// função :: Pesquisar produtos.
 	@GetMapping
 	public ModelAndView pesquisar() {
-		ModelAndView mv = new ModelAndView("Produtos");
+		ModelAndView mv = new ModelAndView(PRODUTOS_VIEW);
 		mv.addObject("produtos", produtos.findAll());
 		return mv;
 	}
 
+	// função :: Excluir produtos.
 	@DeleteMapping("{codigo}")
 	public String excluir(@PathVariable Long codigo, RedirectAttributes attributes) {
-		produtos.delete(codigo);
+		produtoService.excluir(codigo);
 		attributes.addFlashAttribute("mensagem", "O produto foi excluido com sucesso.");
 		return "redirect:/produtos";
+	}
+
+	// função :: Editar produtos.
+	@GetMapping("{codigo}")
+	public ModelAndView editar(@PathVariable("codigo") Produto produto) {
+		ModelAndView mv = new ModelAndView(CADASTRO_PRODUTO_VIEW);
+		mv.addObject(produto);
+		return mv;
 	}
 
 	// função :: Cadastrar categorias.
 	@PostMapping("/novo/categoria")
 	public String cadastrarCategoria(@Validated Categoria categoria, Errors errors, RedirectAttributes attributes) {
 		if (errors.hasErrors()) {
-			return "Categorias";
+			return CATEGORIAS_VIEW;
 		}
-		categorias.save(categoria);
-		attributes.addFlashAttribute("mensagem", "Nova categoria adicionada.");
+		if (categoria.getCodigo() == null) {
+			attributes.addFlashAttribute("mensagem", "Nova categoria adicionada.");
+		} else {
+			attributes.addFlashAttribute("mensagem", "A categoria foi editada com sucesso.");
+		}
+		produtoService.salvarCategoria(categoria);
 		return "redirect:/produtos/categoria";
+	}
+
+	// função :: Excluir categoria
+	@DeleteMapping("/categoria/excluir/{codigo}")
+	public String excluirCategoria(@PathVariable Long codigo, RedirectAttributes attributes) {
+		try {
+			produtoService.excluirCategoria(codigo);
+		} catch (IllegalArgumentException e) {
+			attributes.addFlashAttribute("mensagemErroDireta", e.getMessage());
+			return "redirect:/produtos/categoria";
+		}
+		attributes.addFlashAttribute("mensagem", "Categoria excluida com sucesso.");
+		return "redirect:/produtos/categoria";
+	}
+
+	// função :: Editar categoria
+	@GetMapping("/categoria/editar/{codigo}")
+	public ModelAndView editarCategoria(@PathVariable("codigo") Categoria categoria) {
+		ModelAndView mv = new ModelAndView(CATEGORIAS_VIEW);
+		mv.addObject(categoria);
+		return mv;
 	}
 
 	// função :: Entregar uma lista de categorias para a tela.

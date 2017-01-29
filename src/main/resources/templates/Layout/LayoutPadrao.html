@@ -10,12 +10,12 @@
 </head>
 <body>
 
-	<div th:insert="~{Cabecalho :: cabecalho}"></div>
+	<div th:insert="~{Layout/Cabecalho :: cabecalho}"></div>
 	
 	<section layout:fragment="conteudo"></section>
 
 	<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
 	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-	<script type="text/javascript" th:src="@{/js/controle-estoque.js}"></script>
+	<script type="text/javascript" th:src="@{/js/produtos.js}"></script>
 </body>
 </html>

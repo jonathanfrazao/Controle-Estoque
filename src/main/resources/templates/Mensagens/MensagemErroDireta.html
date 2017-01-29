@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="mensagemErroDireta">
+	<div class="alert alert-danger"  th:if="${!#strings.isEmpty(mensagemErroDireta)}">
+		<span th:text="${mensagemErroDireta}"></span>
+	</div>
+</div>
+
+</html>
